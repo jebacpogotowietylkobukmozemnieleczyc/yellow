@@ -43,6 +43,7 @@ ApplicationWindow {
             }
             TextField {
                 id: filename
+                text: qsTr("testlib.dll")
                 implicitWidth: 200
                 onTextChanged: updateStatusBar()
             }
@@ -59,6 +60,7 @@ ApplicationWindow {
             }
             TextField {
                 id: mfunction
+                text: qsTr("funtion")
                 Layout.fillWidth: true
                 onTextChanged: updateStatusBar()
             }
@@ -72,6 +74,7 @@ ApplicationWindow {
             }
             TextField {
                 id: mdfunction
+                text: qsTr("dfuntion")
                 Layout.fillWidth: true
                 onTextChanged: updateStatusBar()
             }
@@ -153,6 +156,7 @@ ApplicationWindow {
         id: newton
         filename: filename.text
         mfunction: mfunction.text
+        mdfunction: mdfunction.text
         x: x.text
         x2: x2.text
         mit:mit.text
@@ -161,6 +165,7 @@ ApplicationWindow {
         onResultGenerated: {
             //if (success) {
                 status.text = qsTr('<font color="green">Wynik: </font>'+result+'<br />
+                                   <font color="green">width: </font>'+width+'<br />
                                    <font color="green">fx: </font>'+fx+'<br />
                                    <font color="green">status: </font>'+state+'<br />
                                    <font color="green">i: </font>'+i)

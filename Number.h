@@ -18,6 +18,8 @@
 
 #include "ErrorCode.h"
 
+# define M_PI          3.141592653589793238462643383279502884L /* pi */
+#define M_SQRT2   1.41421356237309504880 /* sqrt(2) */
 namespace ean
 {
 	template<typename T>
@@ -97,7 +99,21 @@ namespace ean
 			return std::fabs(m_value - rhs.m_value) < T(LDBL_EPSILON);
 		}
 
-		Number& opposite() 
+        bool operator<(const T& rhs) const
+        {
+            return m_value < rhs;
+        }
+
+        bool operator<(const Number& rhs) const
+        {
+            return m_value < rhs.m_value;
+        }
+//zero
+        bool isZero(){
+            return m_value==0;
+        }
+
+        Number& opposite()
 		{
 			m_value = -m_value;
 			return *this;
@@ -107,8 +123,13 @@ namespace ean
 		{
 			return Number{-m_value};
 		}
-
-		Number& invert() 
+//abs
+        Number abs() const
+        {
+            if(m_value<0)return Number(-m_value);
+            return Number(m_value);
+        }
+        Number& invert()
 		{
 			m_value = 1 / m_value;
 			return *this;
@@ -148,10 +169,10 @@ namespace ean
 		std::string to_string() const 
 		{
 			std::ostringstream oss;
-			oss << std::setprecision(15) << m_value;
+            oss << std::scientific << std::setprecision(32) << m_value;
 			return oss.str();
-		}
-
+        }
+    T getM_value(){return m_value;}
 	private:
 		T m_value = 0;
 	};

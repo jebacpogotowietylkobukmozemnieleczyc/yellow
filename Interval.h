@@ -24,6 +24,10 @@ namespace ean
 		{
 			m_value = {left, right};
 		}
+        Interval(long double number)
+                {
+                    m_value = {number,number};
+                }
 
 		Interval(const std::string& value);
 
@@ -46,9 +50,11 @@ namespace ean
 		Interval operator/(const Interval& rhs) const;
 
 		bool operator==(const Interval& rhs) const;
-
+        bool operator<(const long double& rhs) const;
+        bool operator<(const Interval& rhs) const;
+        bool isZero();
 		Interval& opposite();
-		Interval getOpposite() const;
+        Interval getOpposite() const;
 		Interval& invert();
 		Interval getInverse() const;
 
@@ -60,6 +66,9 @@ namespace ean
 		static Interval sqrt2() { return {IntervalArithmetic::ISqr2()}; }
 		static Interval sqrt3() { return {IntervalArithmetic::ISqr3()}; }
 		static Interval pi() { return {IntervalArithmetic::IPi()}; }
+
+
+        Interval abs() const;
 
 		std::string to_string() const;
 

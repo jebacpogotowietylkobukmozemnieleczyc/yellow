@@ -22,6 +22,7 @@ HEADERS += \
     Interval.h \
     ErrorCode.h \
     IntervalArithmetic.h \
-    Number.h
+    Number.h \
+    conversion.h
 
 LIBS += -lmpfr -lgmp

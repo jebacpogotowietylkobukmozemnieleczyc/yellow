@@ -75,8 +75,20 @@ namespace ean
 		return (std::fabs(m_value.a - rhs.m_value.a) < LDBL_EPSILON)
 			&& (std::fabs(m_value.b - rhs.m_value.b) < LDBL_EPSILON);
 	}
+//zero
 
-	Interval& Interval::opposite() 
+        bool Interval::isZero(){
+            return m_value.a<=0 && m_value.b>=0;
+        }
+        bool Interval::operator<(const long double& rhs) const
+        {
+            return m_value.b < rhs;
+        }
+        bool Interval::operator<(const Interval& rhs) const
+        {
+            return m_value.b < rhs.m_value.b;
+        }
+    Interval& Interval::opposite()
 	{
 		m_value = IntervalArithmetic::Opposite(m_value);
 		return *this;
@@ -153,6 +165,20 @@ namespace ean
 			return  ErrorCode<Interval>::createError(DivisionByZeroCode);
 		}
 	}
+
+
+//abs
+        Interval Interval::abs() const
+        {
+            long double x = m_value.a;
+            long double y = m_value.b;
+            if(x<0)x= -x;
+            if(y<0)y= -y;
+            x = std::min(x,y);
+            y = std::max(x,y);
+            Interval in(x,y);
+            return in;
+        }
 
 	std::string Interval::to_string() const
 	{

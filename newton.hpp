@@ -5,7 +5,11 @@
 #include <QString>
 #include <QStringList>
 
-
+#include "Interval.h"
+#include "Number.h"
+typedef int (*myFuncDef)(int, int);
+typedef ean::Number<long double> (*nPointer)(ean::Number<long double>);
+typedef ean::Interval (*iPointer)(ean::Interval);
 
 class Newton : public QObject
 {
@@ -50,8 +54,13 @@ public:
     QString mdfunction();
     void setMdfunction(const QString &p);
 
-    long double calculate(double x,int mit,double eps,int & i,int &state,double & fx);
 
+template <typename T,typename T2>
+T calculate(T2 function,T2 dfunction,T x,int mit,long double eps,int & i,int &state,T &fx);
+
+    //long double calculate(MyPrototype funtion,MyPrototype dfuntion,long double x,int mit,long double eps,int & i,int &state,long double & fx);
+
+    //long double calculateInterval(MyPrototype function,MyPrototype dfunction,ean::Interval x,int mit,double eps,int & i,int &state,double &fx,double &fx2);
 public slots:
     void generateResult(QString x,QString mit,QString eps);
 
@@ -65,7 +74,7 @@ signals:
     void filenameChanged();
     void mfunctionChanged();
     void mdfunctionChanged();
-    void resultGenerated(bool success,QString state,QString result,QString fx,QString i);
+    void resultGenerated(bool success,QString state,QString result,QString width,QString fx,QString i);
 
 private:
     QString _x;
