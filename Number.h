@@ -169,7 +169,7 @@ namespace ean
 		std::string to_string() const 
 		{
 			std::ostringstream oss;
-            oss << std::scientific << std::setprecision(32) << m_value;
+            oss << std::scientific << std::setprecision(15) << m_value;
 			return oss.str();
         }
     T getM_value(){return m_value;}

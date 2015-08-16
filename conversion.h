@@ -4,7 +4,7 @@
         std::string showLD(T value)
         {
             std::ostringstream oss;
-            oss << std::scientific << std::setprecision(32) << value;
+            oss << std::scientific << std::setprecision(16) << value;
             return oss.str();
         }
 

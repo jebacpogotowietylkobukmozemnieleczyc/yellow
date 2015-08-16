@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <climits>
 #include <cmath>
+#include <limits>
 
 #include "mpfr.h"
 
@@ -797,7 +798,7 @@ interval IntervalArithmetic::IPi()
 	r.b = RightRead(i2);
 	return r;
 }
-
+/*
 void IntervalArithmetic::IEndsToStrings(const interval& i, string& left, string& right)
 {
 	ostringstream oss;
@@ -825,4 +826,42 @@ void IntervalArithmetic::IEndsToStrings(const interval& i, string& left, string&
 	right = oss2.str();
 
 	complementExponent(right);
+}
+*/
+void IntervalArithmetic::IEndsToStrings(const interval & i, string & left,
+        string & right)
+{
+    int precision = 80;
+    int outdigits = 16;
+
+    mpfr_t rop;
+    mpfr_exp_t exponent;
+    mpfr_init2(rop, precision);
+    char* str = NULL;
+    char *buffer = new char(precision + 3);
+    mpfr_set_ld(rop, i.a, MPFR_RNDD);
+
+    mpfr_get_str(buffer, &exponent, 10, outdigits, rop, MPFR_RNDD);
+    str = buffer;
+
+    stringstream ss;
+    int prec = std::numeric_limits<long double>::digits10;
+    ss.setf(std::ios_base::scientific);
+    bool minus = (str[0] == '-');
+    int splitpoint = minus ? 1 : 0;
+    string sign = minus ? "-" : "";
+
+    ss << std::setprecision(prec) << sign << str[splitpoint] << "."
+            << &str[splitpoint + 1] << "E" << exponent - 1;
+    left = ss.str();
+    ss.str(std::string());
+
+    mpfr_set_ld(rop, i.b, MPFR_RNDU);
+    mpfr_get_str(buffer, &exponent, 10, outdigits, rop, MPFR_RNDU);
+    str = buffer;
+    splitpoint = (str[0] == '-') ? 1 : 0;
+    ss << std::setprecision(prec) << sign << str[splitpoint] << "."
+            << &str[splitpoint + 1] << "E" << exponent - 1;
+    right = ss.str();
+    ss.clear();
 }

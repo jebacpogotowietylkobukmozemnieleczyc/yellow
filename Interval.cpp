@@ -184,7 +184,7 @@ namespace ean
 	{
 		string left, right;
 		IntervalArithmetic::IEndsToStrings(m_value, left, right);
-		return "[" + std::move(left) + ", " + std::move(right) + "]";
+        return "[" + std::move(left) + ", " + std::move(right) + "]";
 	}
 
 	std::string Interval::getLeftAsString() const

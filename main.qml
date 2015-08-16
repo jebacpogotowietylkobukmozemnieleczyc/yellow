@@ -60,7 +60,7 @@ ApplicationWindow {
             }
             TextField {
                 id: mfunction
-                text: qsTr("funtion")
+                text: qsTr("function")
                 Layout.fillWidth: true
                 onTextChanged: updateStatusBar()
             }
@@ -74,7 +74,7 @@ ApplicationWindow {
             }
             TextField {
                 id: mdfunction
-                text: qsTr("dfuntion")
+                text: qsTr("dfunction")
                 Layout.fillWidth: true
                 onTextChanged: updateStatusBar()
             }
@@ -148,7 +148,7 @@ ApplicationWindow {
         nameFilters: [ "All files (*)" ]
         selectedNameFilter: "All files (*)"
         onAccepted: {
-            filename.text = fileUrl.toString().replace("file://", "")
+            filename.text = fileUrl.toString().replace("file:///", "")
         }
     }
 
@@ -163,15 +163,19 @@ ApplicationWindow {
         eps:eps.text
         type:combobox.currentText
         onResultGenerated: {
-            //if (success) {
+            if (state=="0") {
                 status.text = qsTr('<font color="green">Wynik: </font>'+result+'<br />
                                    <font color="green">width: </font>'+width+'<br />
                                    <font color="green">fx: </font>'+fx+'<br />
                                    <font color="green">status: </font>'+state+'<br />
                                    <font color="green">i: </font>'+i)
-            //} else {
-              //  status.text = qsTr('<font color="red">Key generation failed</font>')
-            //}
+            } else {
+                status.text = qsTr('<font color="red">Wynik: </font>'+result+'<br />
+                                   <font color="red">width: </font>'+width+'<br />
+                                   <font color="red">fx: </font>'+fx+'<br />
+                                   <font color="red">status: </font>'+state+'<br />
+                                   <font color="red">i: </font>'+i)
+            }
         }
     }
 

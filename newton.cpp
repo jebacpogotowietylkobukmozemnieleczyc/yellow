@@ -168,16 +168,16 @@ T Newton::calculate(T2 function,T2 dfunction,T x,int mit,long double eps,int & i
 state = 3;
 for(i=1;i<=mit;i++){
     T df = dfunction(x);
-    T zero(0);
-    if(df==zero){
+    if(df.isZero()){
         state = 2;
+        T zero(0);
         return zero;
     }
     fx = function(x);
     T nx=x-fx/df;
     T rx = nx -x;
     T test = rx.abs()/ std::max( nx.abs(),x.abs(), [](const T& a,const T& b){return a<b;});
-    if(nx==zero || x==zero ||  test<eps ){
+    if(nx.isZero() || x.isZero() ||  test<eps ){
         state = 0;
         return nx;
     }
@@ -242,7 +242,7 @@ long double readLD(std::string val) {
 void Newton::generateResult(QString x,QString mit,QString eps)
 {
     //sprawdzanie poprawności danych
-        std::cout << "lol" << std::endl;
+
         //pola puste
         if (_x.isEmpty() || _filename.isEmpty()|| _mfunction.isEmpty() || _mfunction.isEmpty() || _eps.isEmpty() || _mit.isEmpty() ) {
             emit resultGenerated(true,"4","0","0","0","0");
@@ -267,8 +267,16 @@ void Newton::generateResult(QString x,QString mit,QString eps)
 
            if(_type=="przedziałowa"){
     // wczytanie dll
-       iPointer ip = &fun2<ean::Interval>;
-       iPointer dip = &dfun2<ean::Interval>;
+       //iPointer ip = &fun<ean::Interval>;
+       //iPointer dip = &dfun<ean::Interval>;
+               std::string fn = 'i' + _mfunction.toStdString();
+               std::cout << fn << std::endl;
+               iPointer ip =
+                       (iPointer) QLibrary::resolve(_filename, fn.c_str());
+               std::string fn2 = 'i' + _mdfunction.toStdString();
+               iPointer dip =
+                       (iPointer) QLibrary::resolve(_filename, fn2.c_str());
+
         if (ip==0 || dip ==0) {
             emit resultGenerated(true,"5","0","0","0","0");
             return;
@@ -287,13 +295,16 @@ void Newton::generateResult(QString x,QString mit,QString eps)
                 *interval  = calculate(ip,dip,*interval,imit,deps,i,state,fx);
                 x = QString::fromStdString(interval->to_string());
                 qfx = QString::fromStdString(fx.to_string());
-                qwidth = QString::fromStdString(showLD<long double>(fx.getWidth()));
-                if(*interval<deps)std::cout << "wietnam goodmorning";
+                qwidth = QString::fromStdString(showLD<long double>(interval->getWidth()));
            }
            else{
     // wczytanie dll
-       nPointer np = &fun2<ean::Number<long double>>;
-       nPointer dnp = &dfun2<ean::Number<long double>>;
+       //nPointer np = &fun<ean::Number<long double>>;
+       //nPointer dnp = &dfun<ean::Number<long double>>;
+               nPointer np =
+                       (nPointer) QLibrary::resolve(_filename, _mfunction.toStdString().c_str());
+               nPointer dnp =
+                       (nPointer) QLibrary::resolve(_filename, _mdfunction.toStdString().c_str());
        ean::Number<long double> fx(0);
         if (np==0 || dnp ==0) {
             emit resultGenerated(true,"5","0","0","0","0");
@@ -305,7 +316,6 @@ void Newton::generateResult(QString x,QString mit,QString eps)
                 x = QString::fromStdString(number.to_string());
                 qfx = QString::fromStdString(fx.to_string());
                 qwidth = "0";
-                if(number<deps)std::cout << "wietnam goodmorning";
            }
 
     //conversion
